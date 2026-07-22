@@ -1,0 +1,22 @@
+spring:
+    application:
+        name: CiudadSana
+
+    datasource:
+        url: jdbc:postgresql://aws-1-us-east-2.pooler.supabase.com:6543/postgres?prepareThreshold=0
+        username: postgres.koponombefywtaalimsz
+        password: Admin29011012*
+        driver-class-name: org.postgresql.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+
+app:
+    jwt:
+        secret: clave_secreta_desarrollo_32_caracteres_minimo_OK
+        expiration-minutes: 30
