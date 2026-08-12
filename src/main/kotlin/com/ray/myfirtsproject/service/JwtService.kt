@@ -51,6 +51,8 @@ class JwtService(
         }
     }
 
+    fun expiracion(token: String): Date? = extractAllClaims(token)?.expiration
+
     private fun isTokenExpired(token: String): Boolean {
         return extractAllClaims(token)?.expiration?.before(Date()) ?: true
     }

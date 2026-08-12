@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+.gradle-user
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -38,3 +39,15 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+# Archivos locales y sensibles
+.env
+.env.*
+!.env.example
+
+# Archivos subidos por usuarios
+uploads/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

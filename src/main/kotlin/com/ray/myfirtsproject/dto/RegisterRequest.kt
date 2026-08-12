@@ -7,25 +7,25 @@ import java.time.LocalDate
 
 data class RegisterRequest(
 
-    val primerNombre: String,
+    @field:NotBlank @field:Size(max = 80) val primerNombre: String,
 
     val segundoNombre: String?,
 
-    val primerApellido: String,
+    @field:NotBlank @field:Size(max = 80) val primerApellido: String,
 
     val segundoApellido: String?,
 
-    val idTipoDocumento: Int,
+    @field:jakarta.validation.constraints.Positive val idTipoDocumento: Int,
 
-    val numeroDocumento: String,
+    @field:NotBlank val numeroDocumento: String,
 
-    val idSexo: Int,
+    @field:jakarta.validation.constraints.Positive val idSexo: Int,
 
-    val fechaNacimiento: LocalDate,
+    @field:jakarta.validation.constraints.Past val fechaNacimiento: LocalDate,
 
-    val correo: String,
+    @field:Email @field:NotBlank val correo: String,
 
     val telefono: String?,
 
-    val password: String
+    @field:Size(min = 8, max = 100) val password: String
 )

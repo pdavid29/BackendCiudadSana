@@ -13,11 +13,15 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-
     private val jwtService: JwtService,
-    private val usuarioRepository: UsuarioRepository
-
+    private val usuarioRepository: UsuarioRepository,
+    private val sesionService: com.ray.myfirtsproject.service.SesionService
 ) : OncePerRequestFilter() {
+
+    // Exime las peticiones OPTIONS (preflight) de la evaluación del Token JWT
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        return "OPTIONS".equals(request.method, ignoreCase = true)
+    }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -33,20 +37,17 @@ class JwtAuthenticationFilter(
         }
 
         val token = header.removePrefix("Bearer ").trim()
-
         val correo = jwtService.extractCorreo(token)
 
         if (
             correo != null &&
             jwtService.isTokenValid(token) &&
+            !sesionService.estaRevocado(token) &&
             SecurityContextHolder.getContext().authentication == null
         ) {
-
-            val usuario = usuarioRepository.findByCorreo(correo)
-                .orElse(null)
+            val usuario = usuarioRepository.findByCorreo(correo).orElse(null)
 
             if (usuario != null) {
-
                 val authorities = listOf(
                     SimpleGrantedAuthority("ROLE_${usuario.idRol}")
                 )

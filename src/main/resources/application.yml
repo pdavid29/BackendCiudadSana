@@ -15,8 +15,18 @@ spring:
         properties:
             hibernate:
                 format_sql: true
+    servlet:
+        multipart:
+            max-file-size: 5MB
+            max-request-size: 5MB
+
+logging:
+    level:
+        org.hibernate.SQL: DEBUG
+        org.hibernate.orm.jdbc.bind: TRACE
 
 app:
     jwt:
         secret: clave_secreta_desarrollo_32_caracteres_minimo_OK
         expiration-minutes: 30
+    upload-dir: uploads

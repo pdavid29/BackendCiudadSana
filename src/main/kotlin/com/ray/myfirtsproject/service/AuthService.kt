@@ -44,7 +44,8 @@ class AuthService(
 
         return TokenResponse(
             accessToken = token,
-            expiresIn = jwtService.expirationMinutes * 60
+            expiresIn = jwtService.expirationMinutes * 60,
+            idRol = usuario.idRol
         )
     }
 

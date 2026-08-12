@@ -1,19 +1,15 @@
 package com.ray.myfirtsproject.dto
 
 import java.math.BigDecimal
+import jakarta.validation.constraints.*
 
 data class CrearReporteRequest(
-
-    val titulo: String,
-
-    val descripcion: String,
-
+    @field:NotBlank @field:Size(max = 160) val titulo: String,
+    @field:NotBlank @field:Size(max = 2000) val descripcion: String,
     val direccionReferencia: String?,
-
-    val latitud: BigDecimal,
-
-    val longitud: BigDecimal,
-
-    val idCategoria: Int
-
+    @field:NotNull val latitud: BigDecimal,
+    @field:NotNull val longitud: BigDecimal,
+    @field:Positive val idCategoria: Int,
+    val idBarrio: Int? = 1,
+    val idPrioridad: Int? = 1
 )

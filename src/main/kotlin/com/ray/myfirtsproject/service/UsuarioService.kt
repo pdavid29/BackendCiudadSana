@@ -9,18 +9,14 @@ import java.util.UUID
 
 @Service
 class UsuarioService(
-
     private val usuarioRepository: UsuarioRepository
-
 ) {
 
     fun listar(): List<UserResponse> {
-
         return usuarioRepository.findAll().map { it.toResponse() }
     }
 
     fun buscarPorId(id: UUID): UserResponse {
-
         val usuario = usuarioRepository.findById(id)
             .orElseThrow { RuntimeException("Usuario no encontrado") }
 
@@ -31,7 +27,6 @@ class UsuarioService(
         id: UUID,
         request: UpdateUsuarioRequest
     ): UserResponse {
-
         val usuario = usuarioRepository.findById(id)
             .orElseThrow { RuntimeException("Usuario no encontrado") }
 
@@ -50,15 +45,22 @@ class UsuarioService(
     }
 
     fun eliminar(id: UUID) {
-
         val usuario = usuarioRepository.findById(id)
             .orElseThrow { RuntimeException("Usuario no encontrado") }
 
         usuarioRepository.delete(usuario)
     }
 
-    private fun Usuario.toResponse(): UserResponse {
+    // 📌 Método para cambiar el estado (activar / desactivar)
+    fun cambiarEstado(id: UUID, estado: Boolean): UserResponse {
+        val usuario = usuarioRepository.findById(id)
+            .orElseThrow { RuntimeException("Usuario no encontrado") }
 
+        usuario.estado = estado
+        return usuarioRepository.save(usuario).toResponse()
+    }
+
+    private fun Usuario.toResponse(): UserResponse {
         return UserResponse(
             idUsuario = idUsuario!!,
             primerNombre = primerNombre,

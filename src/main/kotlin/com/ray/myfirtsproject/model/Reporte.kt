@@ -5,15 +5,15 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "reporte")
-data class Reporte(
+@Table(name = "reporte", schema = "public")
+class Reporte(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_reporte")
     var idReporte: Int? = null,
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     var titulo: String = "",
 
     @Column(nullable = false)
@@ -34,11 +34,22 @@ data class Reporte(
     @Column(name = "id_categoria", nullable = false)
     var idCategoria: Int = 1,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "id_ciudadano",
-        nullable = false
-    )
-    var ciudadano: Usuario? = null
+    @Column(name = "id_barrio", nullable = false)
+    var idBarrio: Int = 1,
 
+    @Column(name = "id_prioridad", nullable = false)
+    var idPrioridad: Int = 1,
+
+    @Column(name = "id_estado", nullable = false)
+    var idEstado: Int = 1,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_ciudadano", nullable = false)
+    var ciudadano: Usuario? = null,
+
+    @Column(name = "observaciones_cierre")
+    var observacionesCierre: String? = null,
+
+    @Column(name = "estado", nullable = false)
+    var estado: Boolean = true
 )
