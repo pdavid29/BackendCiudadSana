@@ -3,17 +3,16 @@ package com.ray.myfirtsproject.config
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.web.filter.CorsFilter
 
 @Configuration
 class CorsConfig {
 
     @Bean
-    fun corsFilter(): CorsFilter {
+    fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
-
-        // Permite cualquier subdominio de Vercel (*.vercel.app) y tus entornos locales
+        // Permite cualquier origen de Vercel y tu entorno local
         config.allowedOriginPatterns = listOf(
             "https://*.vercel.app",
             "http://localhost:4200",
@@ -26,6 +25,6 @@ class CorsConfig {
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", config)
-        return CorsFilter(source)
+        return source
     }
 }

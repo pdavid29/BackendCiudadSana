@@ -14,15 +14,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.beans.factory.annotation.Value
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    @param:Value("\${app.cors.allowed-origins:http://localhost:4200,http://127.0.0.1:4200,http://localhost:5500,http://127.0.0.1:5500}")
-    private val allowedOrigins: String
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
 
     @Bean
@@ -36,7 +33,16 @@ class SecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                auth.requestMatchers("/auth/login", "/auth/register", "/auth/register-con-foto", "/catalogos/registro", "/auth/recuperar-contrasena", "/auth/restablecer-contrasena", "/", "/error").permitAll()
+                auth.requestMatchers(
+                    "/auth/login",
+                    "/auth/register",
+                    "/auth/register-con-foto",
+                    "/catalogos/registro",
+                    "/auth/recuperar-contrasena",
+                    "/auth/restablecer-contrasena",
+                    "/",
+                    "/error"
+                ).permitAll()
                 auth.anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -49,10 +55,17 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
 
-        // Acepta los orígenes habituales de Live Server y localhost
-        configuration.allowedOrigins = allowedOrigins.split(',').map { it.trim() }.filter { it.isNotEmpty() }
+        // Permite dinámicamente cualquier despliegue de Vercel y entornos locales
+        configuration.allowedOriginPatterns = listOf(
+            "https://*.vercel.app",
+            "http://localhost:4200",
+            "http://127.0.0.1:4200",
+            "http://localhost:5500",
+            "http://127.0.0.1:5500"
+        )
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         configuration.allowedHeaders = listOf("*")
+        configuration.exposedHeaders = listOf("Authorization", "Content-Type")
         configuration.allowCredentials = true
 
         val source = UrlBasedCorsConfigurationSource()
