@@ -27,6 +27,9 @@ class CategoriaService(
     }
 
     fun eliminar(id: Long) {
-        categoriaRepository.deleteById(id)
+        val categoria = categoriaRepository.findById(id)
+            .orElseThrow { IllegalArgumentException("Categoría no encontrada") }
+        categoria.estado = false
+        categoriaRepository.save(categoria)
     }
 }

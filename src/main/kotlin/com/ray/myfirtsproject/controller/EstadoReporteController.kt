@@ -5,6 +5,7 @@ import com.ray.myfirtsproject.repository.EstadoReporteRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.access.prepost.PreAuthorize
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/estados")
@@ -13,7 +14,7 @@ class EstadoReporteController(
 ) {
     @GetMapping
     fun listarTodos(): ResponseEntity<List<EstadoReporte>> =
-        ResponseEntity.ok(estadoRepository.findAll())
+        ResponseEntity.ok(estadoRepository.findAll().filter { it.estado })
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_1')")
@@ -26,13 +27,17 @@ class EstadoReporteController(
         val estado = estadoRepository.findById(id).orElseThrow { IllegalArgumentException("Estado no encontrado") }
         estado.nombre = datos.nombre
         estado.descripcion = datos.descripcion
+        estado.estado = datos.estado
         return ResponseEntity.ok(estadoRepository.save(estado))
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_1')")
     fun eliminar(@PathVariable id: Long): ResponseEntity<Void> {
-        estadoRepository.deleteById(id)
+        val estado = estadoRepository.findById(id).orElseThrow { IllegalArgumentException("Estado no encontrado") }
+        estado.estado = false
+        estado.updatedAt = LocalDateTime.now()
+        estadoRepository.save(estado)
         return ResponseEntity.noContent().build()
     }
 }

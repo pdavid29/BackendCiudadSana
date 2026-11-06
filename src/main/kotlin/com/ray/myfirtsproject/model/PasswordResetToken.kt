@@ -11,5 +11,10 @@ class PasswordResetToken(
     @Column(nullable = false, unique = true, length = 100) var token: String,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "id_usuario", nullable = false) var usuario: Usuario,
     @Column(name = "fecha_expiracion", nullable = false) var fechaExpiracion: LocalDateTime,
-    @Column(nullable = false) var usado: Boolean = false
-)
+    @Column(nullable = false) var usado: Boolean = false,
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false) var createdAt: LocalDateTime? = null,
+    @Column(name = "updated_at", nullable = false, insertable = false) var updatedAt: LocalDateTime? = null,
+    @Column(nullable = false) var estado: Boolean = true
+) {
+    @PreUpdate fun touchUpdatedAt() { updatedAt = LocalDateTime.now() }
+}

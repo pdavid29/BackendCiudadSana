@@ -13,5 +13,8 @@ class HistorialActividad(
     @Column(name = "entidad", nullable = false, length = 80) var entidad: String,
     @Column(name = "id_entidad", length = 80) var idEntidad: String? = null,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "id_usuario") var usuario: Usuario? = null,
-    @Column(name = "fecha_hora", nullable = false) var fechaHora: LocalDateTime = LocalDateTime.now()
+    @Column(name = "fecha_hora", nullable = false) var fechaHora: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false) var createdAt: LocalDateTime? = null,
+    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false) var updatedAt: LocalDateTime? = null,
+    @Column(nullable = false) var estado: Boolean = true
 )

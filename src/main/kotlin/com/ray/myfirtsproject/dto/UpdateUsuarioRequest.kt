@@ -13,3 +13,11 @@ data class UpdateUsuarioRequest(
     val telefono: String?,
     val fotoPerfil: String?
 )
+
+data class ActualizarMiPerfilRequest(
+    @field:jakarta.validation.constraints.NotBlank
+    @field:jakarta.validation.constraints.Size(max = 160)
+    val nombre: String,
+    @field:jakarta.validation.constraints.Size(max = 30)
+    val telefono: String?
+)

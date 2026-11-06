@@ -4,6 +4,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
+import jakarta.persistence.PreUpdate
 import jakarta.persistence.Table
 import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDate
@@ -65,6 +66,11 @@ data class Usuario(
     @Column(name = "created_at", insertable = false, updatable = false)
     var createdAt: LocalDateTime? = null,
 
-    @Column(name = "updated_at", insertable = false, updatable = false)
+    @Column(name = "updated_at", insertable = false)
     var updatedAt: LocalDateTime? = null
-)
+) {
+    @PreUpdate
+    fun touchUpdatedAt() {
+        updatedAt = LocalDateTime.now()
+    }
+}

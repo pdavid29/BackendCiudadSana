@@ -73,7 +73,7 @@ class ReporteController(
         @RequestBody request: CambiarEstadoRequest,
         authentication: Authentication
     ): ResponseEntity<ReporteResponse> {
-        return ResponseEntity.ok(reporteService.cambiarEstado(id, request.idEstado, authentication.name))
+        return ResponseEntity.ok(reporteService.cambiarEstado(id, request, authentication.name))
     }
 
     // RF-11 / RF-12: Técnico resuelve el reporte y añade observaciones
@@ -96,12 +96,12 @@ class ReporteController(
         ResponseEntity.ok(reporteService.evidencias(id, authentication.name))
 
     @PostMapping("/{id}/evidencias", consumes = ["multipart/form-data"])
-    @PreAuthorize("hasAuthority('ROLE_3')")
+    @PreAuthorize("hasAnyAuthority('ROLE_3', 'ROLE_4')")
     fun cargarEvidencia(@PathVariable id: Int, @RequestParam("archivo") archivo: MultipartFile, authentication: Authentication): ResponseEntity<EvidenciaResponse> =
         ResponseEntity.status(HttpStatus.CREATED).body(reporteService.cargarEvidencia(id, archivo, authentication.name))
 
     @GetMapping("/evidencias/{id}/archivo")
-    fun descargarEvidencia(@PathVariable id: Long, authentication: Authentication): ResponseEntity<Resource> {
+    fun descargarEvidencia(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Resource> {
         val (archivo, tipoContenido) = reporteService.archivoEvidencia(id, authentication.name)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(tipoContenido))
             .body(InputStreamResource(java.nio.file.Files.newInputStream(archivo)))

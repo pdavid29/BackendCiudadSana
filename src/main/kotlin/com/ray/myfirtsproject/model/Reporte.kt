@@ -31,6 +31,12 @@ class Reporte(
     @Column(name = "fecha_reporte", nullable = false)
     var fechaReporte: LocalDateTime = LocalDateTime.now(),
 
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+    var createdAt: LocalDateTime? = null,
+
+    @Column(name = "updated_at", nullable = false, insertable = false)
+    var updatedAt: LocalDateTime? = null,
+
     @Column(name = "id_categoria", nullable = false)
     var idCategoria: Int = 1,
 
@@ -52,4 +58,7 @@ class Reporte(
 
     @Column(name = "estado", nullable = false)
     var estado: Boolean = true
-)
+) {
+    @PreUpdate
+    fun touchUpdatedAt() { updatedAt = LocalDateTime.now() }
+}

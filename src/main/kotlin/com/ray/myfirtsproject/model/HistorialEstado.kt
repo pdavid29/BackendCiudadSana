@@ -14,6 +14,15 @@ class HistorialEstado(
     @Column(name = "fecha_cambio", nullable = false)
     var fechaCambio: LocalDateTime = LocalDateTime.now(),
 
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+    var createdAt: LocalDateTime? = null,
+
+    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+    var updatedAt: LocalDateTime? = null,
+
+    @Column(nullable = false)
+    var estado: Boolean = true,
+
     var observacion: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,6 +33,6 @@ class HistorialEstado(
     var idEstado: Int,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_funcionario", nullable = false)
-    var funcionario: Usuario
+    @JoinColumn(name = "id_funcionario", nullable = true)
+    var funcionario: Usuario? = null
 )

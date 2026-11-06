@@ -16,7 +16,7 @@ interface ReporteRepository : JpaRepository<Reporte, Int> {
         value = """
             SELECT r.* FROM reporte r 
             INNER JOIN asignacion a ON a.id_reporte = r.id_reporte 
-            WHERE a.id_funcionario = :idTecnico
+            WHERE a.id_funcionario = :idTecnico AND a.estado = TRUE
         """,
         nativeQuery = true
     )
@@ -39,11 +39,15 @@ interface ReporteRepository : JpaRepository<Reporte, Int> {
                 r.id_ciudadano,
                 CONCAT(u_c.primer_nombre, ' ', u_c.primer_apellido) AS nombre_ciudadano,
                 u_t.id_usuario AS id_tecnico,
-                CONCAT(u_t.primer_nombre, ' ', u_t.primer_apellido) AS nombre_tecnico
+                CONCAT(u_t.primer_nombre, ' ', u_t.primer_apellido) AS nombre_tecnico,
+                r.id_barrio,
+                b.nombre AS nombre_barrio,
+                u_t.correo AS correo_tecnico
             FROM reporte r
             LEFT JOIN usuario u_c ON r.id_ciudadano = u_c.id_usuario
-            LEFT JOIN asignacion a ON a.id_reporte = r.id_reporte
+            LEFT JOIN asignacion a ON a.id_reporte = r.id_reporte AND a.estado = TRUE
             LEFT JOIN usuario u_t ON a.id_funcionario = u_t.id_usuario
+            LEFT JOIN barrio b ON b.id_barrio = r.id_barrio
             ORDER BY r.id_reporte ASC
         """,
         nativeQuery = true

@@ -17,6 +17,8 @@ data class UserResponse(
 
     val correo: String,
 
+    val fotoPerfil: String?,
+
     val telefono: String?,
 
     val idRol: Int,
@@ -24,4 +26,9 @@ data class UserResponse(
     val estado: Boolean,
 
     val createdAt: LocalDateTime?
+)
+
+data class TecnicoResponse(
+    val idUsuario: java.util.UUID,
+    val nombre: String
 )

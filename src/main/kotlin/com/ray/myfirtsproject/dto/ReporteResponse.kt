@@ -19,5 +19,8 @@ data class ReporteResponse(
     val nombreCiudadano: String,
     val idTecnico: UUID? = null,
     val nombreTecnico: String? = null,
-    val evidencias: List<EvidenciaResponse> = emptyList()
+    val evidencias: List<EvidenciaResponse> = emptyList(),
+    val idBarrio: Int? = null,
+    val nombreBarrio: String? = null,
+    val correoTecnico: String? = null
 )

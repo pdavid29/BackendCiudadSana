@@ -14,11 +14,20 @@ class Asignacion(
     @Column(name = "fecha_asignacion", nullable = false)
     var fechaAsignacion: LocalDateTime = LocalDateTime.now(),
 
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+    var createdAt: LocalDateTime? = null,
+
+    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+    var updatedAt: LocalDateTime? = null,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_reporte", nullable = false)
     var reporte: Reporte,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_funcionario", nullable = false)
-    var funcionario: Usuario
+    var funcionario: Usuario,
+
+    @Column(name = "estado", nullable = false)
+    var estado: Boolean = true
 )

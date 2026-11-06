@@ -24,7 +24,6 @@ class AuthService(
 ) {
 
     fun login(request: LoginRequest): TokenResponse {
-
         val correo = request.correo.trim().lowercase()
 
         val usuario = usuarioRepository.findByCorreo(correo)
@@ -35,8 +34,8 @@ class AuthService(
         if (!usuario.estado) {
             throw InvalidCredentialsException("Usuario inactivo")
         }
-
-        if (!passwordEncoder.matches(request.password, usuario.contrasena)) {
+        
+        if (!passwordEncoder.matches(request.contrasena, usuario.contrasena)) {
             throw InvalidCredentialsException("Correo o contraseña incorrectos")
         }
 
@@ -47,6 +46,7 @@ class AuthService(
             expiresIn = jwtService.expirationMinutes * 60,
             idRol = usuario.idRol
         )
+
     }
 
     fun register(request: RegisterRequest): UserResponse {
@@ -60,19 +60,32 @@ class AuthService(
             )
         }
 
+        val numeroDocumento = request.numeroDocumento.trim()
+        if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "El número de documento ya está registrado"
+            )
+        }
+
+        val telefono = request.telefono?.trim()?.takeIf { it.isNotEmpty() }
+        if (telefono != null && usuarioRepository.existsByTelefono(telefono)) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "El teléfono ya está registrado")
+        }
+
         val usuario = Usuario(
 
-            primerNombre = request.primerNombre,
+            primerNombre = request.primerNombre.trim(),
 
-            segundoNombre = request.segundoNombre,
+            segundoNombre = request.segundoNombre?.trim()?.takeIf { it.isNotEmpty() },
 
-            primerApellido = request.primerApellido,
+            primerApellido = request.primerApellido.trim(),
 
-            segundoApellido = request.segundoApellido,
+            segundoApellido = request.segundoApellido?.trim()?.takeIf { it.isNotEmpty() },
 
             idTipoDocumento = request.idTipoDocumento,
 
-            numeroDocumento = request.numeroDocumento,
+            numeroDocumento = numeroDocumento,
 
             idSexo = request.idSexo,
 
@@ -80,7 +93,7 @@ class AuthService(
 
             correo = correo,
 
-            telefono = request.telefono,
+            telefono = telefono,
 
             contrasena = passwordEncoder.encode(request.password)!!,
 
@@ -107,6 +120,8 @@ class AuthService(
             segundoApellido = segundoApellido,
 
             correo = correo,
+
+            fotoPerfil = fotoPerfil,
 
             telefono = telefono,
 

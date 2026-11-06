@@ -11,4 +11,10 @@ interface UsuarioRepository : JpaRepository<Usuario, UUID> {
 
     fun existsByCorreo(correo: String): Boolean
 
+    fun existsByNumeroDocumento(numeroDocumento: String): Boolean
+
+    fun existsByTelefono(telefono: String): Boolean
+
+    fun countByEstadoTrue(): Long
+
 }
